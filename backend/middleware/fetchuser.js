@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = "THIS$IS&SIGNATURE_KEY"
+
 const fetchuser= (req,res,next) =>{
     const token = req.header('auth-token')
     if(!token){
