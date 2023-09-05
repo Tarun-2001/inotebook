@@ -2,11 +2,12 @@ const express = require('express') // Importing express
 const User = require('../models/User') // Importing user schema
 const bcrypt = require("bcrypt")  // Importing bcrypt for password hashing      
 const jwt = require('jsonwebtoken');    // Importng jwt for token type authentication
+const { body, validationResult } = require('express-validator'); //Importing validator dependencies
+const fetchuser = require('../middleware/fetchuser')
 
 const router = express.Router()
-const { body, validationResult } = require('express-validator');
 const JWT_SECRET = "THIS$IS&SIGNATURE_KEY"
-//Creating the user
+// ROUTE:1 Creating the user
 router.post('/createUser',[
     body('name','Enter valid name ').isLength({min:3}),
     body('email','Enter valid email').isEmail(),
@@ -46,7 +47,7 @@ router.post('/createUser',[
     }
     
 })
-
+//ROUTE 2 : Authenticating the user with credentitals 
 router.post('/login',[
     body('email','Enter valid email').isEmail(),
     body('password','Password should not be blank').exists({min:5})
@@ -72,15 +73,28 @@ router.post('/login',[
                 id:user.id
             }
         }
+        // Generating the auth token
         const authToken = jwt.sign(data,JWT_SECRET);
         res.json({token:authToken})
     }//Catching errors
     catch(error){
-        res.status(500).send("Error occured")
+        res.status(500).send("Error occured") 
         console.error(error.message)
     }
 
 })
 
+// ROUTE 3 : Get user details if exits
+router.get('/fetchUser', fetchuser,async (req,res)=>{
 
+   try{
+        let userId = req.user.id // id is from fetchuser file 
+        const user = await User.findById(userId).select("-password"); // Finding user by id 
+        res.send(user)
+    }//Catching errors
+    catch(error){
+        res.status(500).send("Error occured") 
+    }
+
+})
 module.exports = router
