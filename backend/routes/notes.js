@@ -8,9 +8,9 @@ const router = express.Router()
 router.get('/fetchNotes',fetchuser,async (req,res)=>{
     try{
         const notes = await Notes.find({user:req.user.id}) // fetching all notes by user id 
-        res.send(notes)
+        res.json({Message:"Notes Feteched Successfully",notes})
     }//Catching errors
-    catch(error){
+    catch(error){   
         res.status(500).send("Error occured") 
     }
 })
@@ -35,7 +35,7 @@ router.post('/addNotes',fetchuser,[
             user:req.user.id
         })
         notes.save()
-        res.send(notes)
+        res.json({Message:"Note Added Successfully",notes})
     }//Catching errors
     catch(error){
         res.status(500).send("Error occured") 
@@ -50,6 +50,9 @@ router.put('/updateNotes/:id',fetchuser,async (req,res)=>{
         
         const usernotes = await Notes.findById(req.params.id)
         if(!usernotes) return res.status(404).send({error:"Please provide the valid id"})
+        
+        // Checking wheather Note is belongs to user or not 
+
         if(usernotes.user.toString()!==req.user.id){
             return res.status(404).send({error:"Operation not Allowed"})
         }
@@ -58,11 +61,35 @@ router.put('/updateNotes/:id',fetchuser,async (req,res)=>{
         if(title) {newnote.title=title}
         if(description){newnote.description=description}
         if(tag){newnote.tag=tag}
-        let result = await Notes.findByIdAndUpdate(req.params.id,{$set:newnote},{new:true})
-        res.json(result)
+        //Fetching note by Id and Updating
+        let result = await Notes.findByIdAndUpdate(req.params.id,{$set:newnote},{new:true}) 
+        res.json({Message:"Note Updated Successfully",result})
     }//Catching errors
     catch(error){
         res.status(500).send("Error occured in updating") 
+    }
+})
+
+//ROUTE 4 : Deleting notes by taking id
+
+router.delete('/deleteNotes/:id',fetchuser,async (req,res)=>{
+
+    try{
+        
+        const usernotes = await Notes.findById(req.params.id)
+        if(!usernotes) return res.status(404).send({error:"Please provide the valid id"})
+
+        // Checking wheather Note is belongs to user or not
+
+        if(usernotes.user.toString()!==req.user.id){
+            return res.status(404).send({error:"Operation not Allowed"})
+        }
+        let result = await Notes.findByIdAndDelete(req.params.id)//Fetching note by Id and Deleting
+        res.json({Message: "Deleted Successfully", result})
+    }//Catching errors
+    catch(error){
+        console.log(error)
+        res.status(500).send("Error occured in Deleting") 
     }
 })
 
