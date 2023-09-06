@@ -15,6 +15,8 @@ router.get('/fetchNotes',fetchuser,async (req,res)=>{
     }
 })
 
+//ROUTE 2 : Add notes by user 
+
 router.post('/addNotes',fetchuser,[
     body('title','Enter valid title name').isLength({min:3}),
     body('description','Description should be more').exists({min:5})
@@ -39,5 +41,30 @@ router.post('/addNotes',fetchuser,[
         res.status(500).send("Error occured") 
     }
 })
+
+//ROUTE 3 : Update the notes by taking id
+
+router.put('/updateNotes/:id',fetchuser,async (req,res)=>{
+
+    try{
+        
+        const usernotes = await Notes.findById(req.params.id)
+        if(!usernotes) return res.status(404).send({error:"Please provide the valid id"})
+        if(usernotes.user.toString()!==req.user.id){
+            return res.status(404).send({error:"Operation not Allowed"})
+        }
+        const {title,description,tag} = req.body
+        const newnote = {}
+        if(title) {newnote.title=title}
+        if(description){newnote.description=description}
+        if(tag){newnote.tag=tag}
+        let result = await Notes.findByIdAndUpdate(req.params.id,{$set:newnote},{new:true})
+        res.json(result)
+    }//Catching errors
+    catch(error){
+        res.status(500).send("Error occured in updating") 
+    }
+})
+
 
 module.exports = router
