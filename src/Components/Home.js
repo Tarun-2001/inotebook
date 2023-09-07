@@ -1,4 +1,5 @@
 import React from "react";
+import Notes from "./Notes";
 
 function Home() {
   return (
@@ -7,7 +8,7 @@ function Home() {
         <div className="container my-5">
           <h1>Add a Note</h1>
           <div className="mb-3">
-            <label for="exampleFormControlInput1" className="form-label">
+            <label htmlFor="exampleFormControlInput1" className="form-label">
               Email address
             </label>
             <input
@@ -18,7 +19,7 @@ function Home() {
             />
           </div>
           <div className="mb  -3">
-            <label for="exampleFormControlTextarea1" className="form-label">
+            <label htmlFor="exampleFormControlTextarea1" className="form-label">
               Example textarea
             </label>
             <textarea
@@ -27,15 +28,16 @@ function Home() {
               rows="3"
             ></textarea>
           </div>
-          <div class="col-12">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="gridCheck" />
-              <label class="form-check-label" for="gridCheck">
+          <div className="col-12">
+            <div className="form-check">
+              <input className="form-check-input" type="checkbox" id="gridCheck" />
+              <label className="form-check-label" htmlFor="gridCheck">
                 Check me out
               </label>
             </div>
           </div>
           <h1>Yout Notes</h1>
+          <Notes></Notes>
         </div>
       </form>
     </div>
