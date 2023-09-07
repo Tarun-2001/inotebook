@@ -1,7 +1,7 @@
 import React from "react";
 
 const NoteItem = (props) => {
-  const { note, key } = props;
+  const { note } = props;
   return (
     <div className="col-md-3 my-3 mx-3">
       <div className="card" style={{width: '18rem'}}>   
@@ -10,6 +10,8 @@ const NoteItem = (props) => {
           <p className="card-text">
             {note.description}
           </p>
+          <i className="fa-solid fa-trash-can mx-3"></i>
+          <i className="fa-solid fa-pen-to-square mx-3 "></i>
         </div>
       </div>
     </div>
