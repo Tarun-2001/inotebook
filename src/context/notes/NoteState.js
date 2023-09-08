@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import noteContext from "./NoteContext";
 const NoteState = (props) => {
-  const note = {
+  const noteIntital = {
     Message: "Notes Feteched Successfully",
     notes: [
       {
@@ -11,58 +11,39 @@ const NoteState = (props) => {
         description: "Note by user 1",
         tag: "General",
         date: "2023-09-07T18:33:56.516Z",
-        __v: 0,
+        __v: 0
       },
-      {
-        _id: "64fa179861abeb3e7c9b7342",
-        user: "64f82bb66c5c505e6b14ba0f",
-        title: "Note 2",
-        description: "Note by user 1",
-        tag: "General",
-        date: "2023-09-07T18:34:00.497Z",
-        __v: 0,
-      },
-      {
-        _id: "64fa179861abeb3e7c9b7342",
-        user: "64f82bb66c5c505e6b14ba0f",
-        title: "Note 2",
-        description: "Note by user 1",
-        tag: "General",
-        date: "2023-09-07T18:34:00.497Z",
-        __v: 0,
-      },
-      {
-        _id: "64fa179861abeb3e7c9b7342",
-        user: "64f82bb66c5c505e6b14ba0f",
-        title: "Note 2",
-        description: "Note by user 1",
-        tag: "General",
-        date: "2023-09-07T18:34:00.497Z",
-        __v: 0,
-      },
-      {
-        _id: "64fa179861abeb3e7c9b7342",
-        user: "64f82bb66c5c505e6b14ba0f",
-        title: "Note 2",
-        description: "Note by user 1",
-        tag: "General",
-        date: "2023-09-07T18:34:00.497Z",
-        __v: 0,
-      },
-      {
-        _id: "64fa179861abeb3e7c9b7342",
-        user: "64f82bb66c5c505e6b14ba0f",
-        title: "Note 2",
-        description: "Note by user 1",
-        tag: "General",
-        date: "2023-09-07T18:34:00.497Z",
-        __v: 0,
-      }
+     
     ],
   };
-  const [notes,setNotes] = useState(note)
+  const [notes,setNotes] = useState(noteIntital.notes)
+   // Add Note
+   const addNote = (title, description, tag)=>{
+    const note={
+      _id: "64fa179w461abeb83qe7c9b7340",
+      user: "64f82bb66c5c505e6b14ba0f",
+      title: title,
+      description: description,
+      tag: tag,
+      date: "2023-09-07T18:33:56.516Z",
+      __v: 0
+    }
+    
+    setNotes(notes.concat(note))
+    // console.log(notes.notes.concat(note))
+   }
+   // Edit Note
+   const editNote = ()=>{
+ 
+   }
+   // Delete Note
+   const deleteNote = (id)=>{
+    // console.log("Deleting note " +id)
+    const delnote = notes.filter((ele)=>{ return ele._id!=id})
+    setNotes(delnote)
+   }
   return (
-    <noteContext.Provider value={{notes,setNotes}}>{props.children}</noteContext.Provider>
+    <noteContext.Provider value={{notes,addNote,deleteNote}}>{props.children}</noteContext.Provider>
   );
 };
 
