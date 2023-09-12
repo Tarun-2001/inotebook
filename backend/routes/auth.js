@@ -14,15 +14,18 @@ router.post('/createUser',[
     body('password','Password must be minimum 5 characters').isLength({min:5})
 ],async (req,res)=>{
     //If there are error return bad request
+    let success = false
     const err = validationResult(req);
     if (!err.isEmpty()) {
+    let success = false
     return res.status(400).json({err:err.array()})
     }
     //Check whether user with same email exist or not
     try{
         let user = await User.findOne({email:req.body.email})// findone method returns null if no ele found .
         if(user) {
-            return res.status(400).json({error : "This Email is already is been used"})
+            let success = false
+            return res.status(400).json({success,error : "This Email is already is been used"})
         }
         //Encrypting the passowrd. 
         const salt = await bcrypt.genSalt(10);
@@ -38,14 +41,15 @@ router.post('/createUser',[
             }
         }
         const authToken = jwt.sign(data,JWT_SECRET);
-        res.send(authToken)
+        success = true
+        res.json({success,authToken})
     }
     // catching errors
     catch(error){
-        res.status(500).send("Error occured")
+        res.status(500).send(error.message)
         console.error(error.message)
     }
-    
+
 })
 //ROUTE 2 : Authenticating the user with credentitals 
 router.post('/login',[
@@ -55,18 +59,22 @@ router.post('/login',[
 ],async (req,res)=>{
     //If there are error return bad request
     const err = validationResult(req);
+    let success = false
     if (!err.isEmpty()) {
+        success= false
     return res.status(400).json({err:err.array()})
     }
     try{
         const {email,password} = req.body;
         let user = await User.findOne({email});
         if(!user){
-            return res.status(400).json({error:"Inccorect email and password"})
+            success= false
+            return res.status(400).json({success, error:"Inccorect email and password"})
         }
         const pwd = await bcrypt.compare(password,user.password)
         if(!pwd){
-            return res.status(400).json({error:"Inccorect email and password"})
+            success= false
+            return res.status(400).json({success, error:"Inccorect email and password"})
         }
         const data = {
             user:{
@@ -75,7 +83,8 @@ router.post('/login',[
         }
         // Generating the auth token
         const authToken = jwt.sign(data,JWT_SECRET);
-        res.json({token:authToken})
+        success= true
+        res.json({success,token:authToken})
     }//Catching errors
     catch(error){
         res.status(500).send("Error occured") 
