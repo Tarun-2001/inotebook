@@ -10,13 +10,13 @@ const AddNote = () => {
     }
     const handleClick = (e)=>{
         e.preventDefault()
-        addNote("note"," ","d" )
+        addNote(note.title,note.description,note.tag )
     }
   return (
     <div>
+          <h1>Add a Note</h1>
       <form className="container">
         <div className="container my-5">
-          <h1>Add a Note</h1>
           <div className="mb-3">
             <label htmlFor="title" className="form-label">
               Title
@@ -35,17 +35,19 @@ const AddNote = () => {
               onChange={handleChange}
             ></textarea>
           </div>
+          <div className="mb  -3">
+            <label htmlFor="tag" className="form-label" >
+              Tag
+            </label>
+            <textarea
+              className="form-control"
+              id="tag"
+              rows="1"
+              name="tag"
+              onChange={handleChange}
+            ></textarea>
+          </div>
           <div className="col-12">
-            <div className="form-check">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="gridCheck"
-              />
-              <label className="form-check-label" htmlFor="gridCheck">
-                Check me out
-              </label>
-            </div>
             <button
               type="submit"
               className="btn btn-primary my-3"
