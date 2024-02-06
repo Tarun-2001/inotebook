@@ -18,5 +18,6 @@ public class NotepadModel {
     private  String title;
     private  String tag;
     private  String description;
-    private Date date;
+    private  Date date;
+    private  AuthenticationModel authenticationModel;
 }
