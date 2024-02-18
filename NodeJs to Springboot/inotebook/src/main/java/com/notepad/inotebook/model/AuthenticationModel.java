@@ -19,5 +19,5 @@ public class AuthenticationModel {
     private String name;
     private String email;
     private String password;
-    private Date data;
+    private Date date;
 }

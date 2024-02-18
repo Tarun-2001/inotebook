@@ -1,6 +1,5 @@
 package com.notepad.inotebook.serviceImpl;
 
-import com.mongodb.client.result.DeleteResult;
 import com.notepad.inotebook.dto.NotesDto;
 import com.notepad.inotebook.model.AuthenticationModel;
 import com.notepad.inotebook.repository.NotepadRepository;
@@ -9,6 +8,8 @@ import com.notepad.inotebook.response.Response;
 import com.notepad.inotebook.service.NotepadService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySources;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -24,7 +25,6 @@ public class NotepadServicempl implements NotepadService {
     NotepadRepository notepadRepository;
 
     String userID = "6500b2d1324f7cdeca15b8a0";
-
     @Autowired
     MongoTemplate mongoTemplate;
     @Autowired
@@ -32,14 +32,7 @@ public class NotepadServicempl implements NotepadService {
     @Autowired
     Response response;
 
-    public NotepadModel sample(){
-        System.out.println(mongoTemplate.findAll(NotepadModel.class));
-        System.out.println(mongoTemplate.findById("6500b2d1324f7cdeca15b8a0",NotepadModel.class).toString()) ;
-//        mongoTemplate.save(notepad);
-//        System.out.println(mongoTemplate.find(notepad.getTitle()));
-//        notepadRepository.save(notepad);
-        return mongoTemplate.findById("6500b2d1324f7cdeca15b8a0",NotepadModel.class);
-    }
+
     public Response fetchNotes() throws NumberFormatException{
             NotepadModel fetchedData = mongoTemplate.findById(userID,NotepadModel.class);
             NotesDto data = modelMapper.map(fetchedData,NotesDto.class);
@@ -85,6 +78,7 @@ public class NotepadServicempl implements NotepadService {
         mongoTemplate.remove(query,NotepadModel.class);
         response.setMessage("Deleted Successfully");
         response.setNotesDto(modelMapper.map(fetchedData,NotesDto.class));
+
         return response;
     }
 
