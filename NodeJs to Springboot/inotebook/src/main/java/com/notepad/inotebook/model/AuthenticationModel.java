@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("user")
+@Document("users")
 public class AuthenticationModel {
 
     @Id
