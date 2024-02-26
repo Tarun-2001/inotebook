@@ -5,6 +5,7 @@ import com.notepad.inotebook.model.AuthenticationModel;
 import com.notepad.inotebook.repository.NotepadRepository;
 import com.notepad.inotebook.model.NotepadModel;
 import com.notepad.inotebook.response.Response;
+import com.notepad.inotebook.security.jwtUtills.JwtUtil;
 import com.notepad.inotebook.service.NotepadService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,6 @@ import java.time.LocalDateTime;
 public class NotepadServicempl implements NotepadService {
     @Autowired
     NotepadRepository notepadRepository;
-
-    String userID = "65c2883c6094d3366828f650";
     @Autowired
     MongoTemplate mongoTemplate;
     @Autowired
@@ -34,11 +33,11 @@ public class NotepadServicempl implements NotepadService {
 
 
     public Response fetchNotes() throws NumberFormatException{
-            NotepadModel fetchedData = mongoTemplate.findById(userID,NotepadModel.class);
-            NotesDto data = modelMapper.map(fetchedData,NotesDto.class);
-            response.setNotesDto(data);
-            response.setMessage("Data Fetched Successfully");
-            return response;
+        NotepadModel fetchedData = notepadRepository.findByAuthenticationModel(JwtUtil.ID);
+        NotesDto data = modelMapper.map(fetchedData, NotesDto.class);
+        response.setNotesDto(data);
+        response.setMessage("Data Fetched Successfully");
+        return response;
     }
 
     public Response addNotes(@RequestBody NotesDto notesDto) throws NumberFormatException{

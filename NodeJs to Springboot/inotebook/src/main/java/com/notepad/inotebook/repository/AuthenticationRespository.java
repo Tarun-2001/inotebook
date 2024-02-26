@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface AuthenticationRespository extends MongoRepository<AuthenticationModel,Integer> {
     AuthenticationModel findByEmail(String username);
+    boolean existsByEmail(String email);
+    AuthenticationModel findById(String id);
 }

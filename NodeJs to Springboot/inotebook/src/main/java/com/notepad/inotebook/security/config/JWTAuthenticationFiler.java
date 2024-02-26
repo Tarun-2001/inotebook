@@ -23,6 +23,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class JWTAuthenticationFiler extends OncePerRequestFilter {
@@ -34,8 +36,16 @@ public class JWTAuthenticationFiler extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-//         Fetch Token from request
+        Pattern pattern = Pattern.compile(".*api/auth.*");
+        Matcher matcher = pattern.matcher(request.getRequestURL());
+        if(matcher.find()){
+            filterChain.doFilter(request,response);
+            return;
+        }
+
+//      Fetch Token from request
         String jwtToken = getTokenFromRequest(request);
+
         if(jwtToken!=null){
             if(JwtUtil.validateToken(jwtToken)){
                 //Get username from Token

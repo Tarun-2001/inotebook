@@ -23,7 +23,7 @@ const SignUp = () => {
     const res = await response.json();
     console.log(res);
     if (res.success) {
-      localStorage.setItem("token", res.authToken);
+      localStorage.setItem("token", res.token);
       history("/");
     } else {
       alert("This Email alredy is been used");

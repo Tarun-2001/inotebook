@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,10 +31,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private AuthenticationRespository authenticationRespository;
     private  AuthenticationModel user;
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userDetails) throws UsernameNotFoundException {
 
         try {
-           user = authenticationRespository.findByEmail(email);
+            if(StringUtils.endsWithIgnoreCase(userDetails,"@gmail.com"))user = authenticationRespository.findByEmail(userDetails);
+            else user = authenticationRespository.findById(userDetails);
         }catch (UsernameNotFoundException e) { throw new UsernameNotFoundException("User not found"); }
             Set<String> roles = new HashSet<>();
             roles.add("ROLE_ADMIN");

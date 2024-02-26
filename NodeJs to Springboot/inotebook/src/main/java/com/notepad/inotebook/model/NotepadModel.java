@@ -24,5 +24,7 @@ public class NotepadModel {
     private  String tag;
     private  String description;
     private LocalDateTime date;
+    @ManyToOne
+    @JoinColumn(name = "id")
     private  AuthenticationModel authenticationModel;
 }

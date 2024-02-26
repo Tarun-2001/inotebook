@@ -15,6 +15,7 @@ import java.util.UUID;
 public class JwtUtil {
 
     private static final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    public static String ID;
     public static boolean validateToken(String jwtToken) {
         return parseToken(jwtToken)!=null;
     }
@@ -31,7 +32,7 @@ public class JwtUtil {
 
     public static String getUserNameFromToken(String jwtToken) {
         Claims claims = parseToken(jwtToken);
-        return claims.getSubject();
+        return ID=claims.getSubject();
 
     }
 

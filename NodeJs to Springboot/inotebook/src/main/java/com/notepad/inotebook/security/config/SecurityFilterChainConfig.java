@@ -34,7 +34,7 @@ public class SecurityFilterChainConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 //         3. Permit all authentication calls and authenticate remaining all requests.
         httpSecurity.authorizeHttpRequests((requestMatch) -> {
-            requestMatch.requestMatchers(HttpMethod.POST,"/api/auth/**").permitAll()
+            requestMatch.requestMatchers("/api/auth/**").permitAll()
                     .anyRequest()
                     .authenticated();
         });

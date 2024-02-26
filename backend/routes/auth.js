@@ -42,7 +42,7 @@ router.post('/createUser',[
         }
         const authToken = jwt.sign(data,JWT_SECRET);
         success = true
-        res.json({success,authToken})
+        res.json({success,token:authToken})
     }
     // catching errors
     catch(error){

@@ -1,20 +1,19 @@
 package com.notepad.inotebook.controller;
 
 import com.notepad.inotebook.dto.AuthenticationDto;
-import com.notepad.inotebook.model.AuthenticationModel;
 import com.notepad.inotebook.repository.AuthenticationRespository;
+import com.notepad.inotebook.response.AuthenticationResponse;
 import com.notepad.inotebook.serviceImpl.AuthenticationImpl;
-import lombok.RequiredArgsConstructor;
-import com.notepad.inotebook.response.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import static com.notepad.inotebook.Utils.LOGIN_SUCCESSFULLY;
+import javax.print.attribute.standard.JobKOctets;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -26,18 +25,33 @@ public class AuthenticationController {
     AuthenticationImpl authenticationImpl;
     @Autowired
     AuthenticationManager authenticationManager;
+    @Autowired
+    AuthenticationResponse authenticationResponse;
 
     @PostMapping("/login")
-    public ResponseEntity<Response> login(@RequestBody AuthenticationDto authenticationDto){
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationDto authenticationDto){
 
-        var jwtToke = authenticationImpl.login(authenticationDto.getEmail(),authenticationDto.getPassword());
-        Response response = new Response();
-        response.setMessage(jwtToke);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        String jwtToke = authenticationImpl.login(authenticationDto.getEmail(),authenticationDto.getPassword());
+        authenticationResponse.setToken(jwtToke);
+        authenticationResponse.setSuccess(true);
+        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<Response> signUp(@RequestBody AuthenticationDto authenticationDto){
-        return null;
+    @PostMapping("/createUser")
+    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody AuthenticationDto authenticationDto){
+
+        String jwtToken = authenticationImpl.signup(authenticationDto.getEmail(),authenticationDto.getPassword(),authenticationDto.getName());
+        authenticationResponse.setToken(jwtToken);
+        authenticationResponse.setSuccess(true);
+        return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
+
+    @GetMapping("/fetchUser")
+    public ResponseEntity fetchUser(){
+
+        Object userDetails = authenticationImpl.fetchUser();
+        Map<String,Object> res = new LinkedHashMap<>();
+        return ResponseEntity.status(HttpStatus.OK).body(userDetails);
+    }
+
 }
