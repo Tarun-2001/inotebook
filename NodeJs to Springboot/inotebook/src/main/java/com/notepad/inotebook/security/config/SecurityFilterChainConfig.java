@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityFilterChainConfig {
     @Autowired
-    private  AuthenticationEntryPoint authenticationEntryPoint;
+    private AuthenticationEntryPoint authenticationEntryPoint;
     @Autowired
     private JWTAuthenticationFiler jwtAuthenticationFilter;
 
@@ -29,7 +29,9 @@ public class SecurityFilterChainConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         // 1. Disable cors origin
-        httpSecurity.cors((cors)->{cors.disable();});
+        httpSecurity.cors((cors) -> {
+            cors.disable();
+        });
         // 2. Disable csrf
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 //         3. Permit all authentication calls and authenticate remaining all requests.
@@ -42,10 +44,12 @@ public class SecurityFilterChainConfig {
 //        httpSecurity.authorizeRequests().anyRequest().authenticated();
 
         // 4. Handle Exception at entry point while authentication
-        httpSecurity.exceptionHandling((execption)->{execption.authenticationEntryPoint(authenticationEntryPoint);});
+        httpSecurity.exceptionHandling((execption) -> {
+            execption.authenticationEntryPoint(authenticationEntryPoint);
+        });
 
         // 5. Set Session policy as stateless because we are using jwt token
-        httpSecurity.sessionManagement(sessionConfig->sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        httpSecurity.sessionManagement(sessionConfig -> sessionConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // 6. Add JWT Authentication filter
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

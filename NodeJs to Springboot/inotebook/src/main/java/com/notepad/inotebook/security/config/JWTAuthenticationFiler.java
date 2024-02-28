@@ -1,4 +1,5 @@
 package com.notepad.inotebook.security.config;
+
 import com.notepad.inotebook.security.jwtUtills.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -38,23 +39,23 @@ public class JWTAuthenticationFiler extends OncePerRequestFilter {
 
         Pattern pattern = Pattern.compile(".*api/auth.*");
         Matcher matcher = pattern.matcher(request.getRequestURL());
-        if(matcher.find()){
-            filterChain.doFilter(request,response);
+        if (matcher.find()) {
+            filterChain.doFilter(request, response);
             return;
         }
 
 //      Fetch Token from request
         String jwtToken = getTokenFromRequest(request);
 
-        if(jwtToken!=null){
-            if(JwtUtil.validateToken(jwtToken)){
+        if (jwtToken != null) {
+            if (JwtUtil.validateToken(jwtToken)) {
                 //Get username from Token
                 String userName = JwtUtil.getUserNameFromToken(jwtToken);
 
                 //Fetch user details from userName
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userName);
 
-                var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                var authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 // Set Authentication token to security context
@@ -63,14 +64,14 @@ public class JWTAuthenticationFiler extends OncePerRequestFilter {
         }
 
         // Pass the request and response to next filter
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
     private String getTokenFromRequest(HttpServletRequest request) {
 
         //Extract Token from header
         String authheader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if(StringUtils.hasText(authheader.substring(7))&&authheader.startsWith("Bearer ")) {
+        if (StringUtils.hasText(authheader.substring(7)) && authheader.startsWith("Bearer ")) {
             return authheader.substring(7);
         }
         return null;

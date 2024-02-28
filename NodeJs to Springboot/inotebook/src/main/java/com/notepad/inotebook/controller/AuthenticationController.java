@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.attribute.standard.JobKOctets;
+import javax.swing.text.Document;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -20,38 +21,33 @@ import java.util.Map;
 public class AuthenticationController {
 
     @Autowired
-    AuthenticationRespository authenticationRespository;
-    @Autowired
     AuthenticationImpl authenticationImpl;
-    @Autowired
-    AuthenticationManager authenticationManager;
     @Autowired
     AuthenticationResponse authenticationResponse;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationDto authenticationDto){
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationDto authenticationDto) {
 
-        String jwtToke = authenticationImpl.login(authenticationDto.getEmail(),authenticationDto.getPassword());
+        String jwtToke = authenticationImpl.login(authenticationDto.getEmail(), authenticationDto.getPassword());
         authenticationResponse.setToken(jwtToke);
         authenticationResponse.setSuccess(true);
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
     @PostMapping("/createUser")
-    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody AuthenticationDto authenticationDto){
+    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody AuthenticationDto authenticationDto) {
 
-        String jwtToken = authenticationImpl.signup(authenticationDto.getEmail(),authenticationDto.getPassword(),authenticationDto.getName());
+        String jwtToken = authenticationImpl.signup(authenticationDto.getEmail(), authenticationDto.getPassword(), authenticationDto.getName());
         authenticationResponse.setToken(jwtToken);
         authenticationResponse.setSuccess(true);
         return new ResponseEntity<>(authenticationResponse, HttpStatus.OK);
     }
 
     @GetMapping("/fetchUser")
-    public ResponseEntity fetchUser(){
+    public ResponseEntity<Document> fetchUser() {
 
         Object userDetails = authenticationImpl.fetchUser();
-        Map<String,Object> res = new LinkedHashMap<>();
-        return ResponseEntity.status(HttpStatus.OK).body(userDetails);
+        return ResponseEntity.status(HttpStatus.OK).body((Document) userDetails);
     }
 
 }

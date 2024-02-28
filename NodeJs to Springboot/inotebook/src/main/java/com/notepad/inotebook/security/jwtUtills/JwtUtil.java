@@ -16,15 +16,16 @@ public class JwtUtil {
 
     private static final Key secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     public static String ID;
+
     public static boolean validateToken(String jwtToken) {
-        return parseToken(jwtToken)!=null;
+        return parseToken(jwtToken) != null;
     }
 
-    private static Claims parseToken(String jwtToken){
+    private static Claims parseToken(String jwtToken) {
         JwtParser build = Jwts.parser().setSigningKey(secretKey).build();
         try {
-            return  build.parseSignedClaims(jwtToken).getPayload();
-        } catch (JwtException |IllegalArgumentException e) {
+            return build.parseSignedClaims(jwtToken).getPayload();
+        } catch (JwtException | IllegalArgumentException e) {
             log.error("JWT Exception occurred");
         }
         return null;
@@ -32,19 +33,19 @@ public class JwtUtil {
 
     public static String getUserNameFromToken(String jwtToken) {
         Claims claims = parseToken(jwtToken);
-        return ID=claims.getSubject();
+        return ID = claims.getSubject();
 
     }
 
-    public static String generateToken(String email){
+    public static String generateToken(String email) {
 
         Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime()+3600000);
-        return  Jwts.builder()
+        Date expireDate = new Date(currentDate.getTime() + 3600000);
+        return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(currentDate)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS256,secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 }

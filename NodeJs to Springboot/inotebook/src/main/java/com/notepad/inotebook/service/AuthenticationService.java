@@ -6,6 +6,8 @@ import java.util.Map;
 
 public interface AuthenticationService {
     String login(String email, String password);
+
     String signup(String email, String password, String name);
+
     Object fetchUser();
 }

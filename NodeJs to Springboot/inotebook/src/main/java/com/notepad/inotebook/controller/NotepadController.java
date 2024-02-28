@@ -19,27 +19,27 @@ public class NotepadController {
     @Autowired
     NotepadService notepadService;
 
-//    @GetMapping
+    //    @GetMapping
 //    public NotepadModel sample(){
 //        return notepadService.sample();
 //    }
     @GetMapping("/fetchNotes")
-    public ResponseEntity<Response> fetchNotes(){
-        return new ResponseEntity<Response>(notepadService.fetchNotes(),HttpStatus.OK);
+    public ResponseEntity<Response> fetchNotes() {
+        return new ResponseEntity<Response>(notepadService.fetchNotes(), HttpStatus.OK);
     }
 
     @PostMapping("/addNotes")
-    public ResponseEntity<Response> addNotes(@RequestBody NotesDto notesDto){
-        return new ResponseEntity<Response>(notepadService.addNotes(notesDto),HttpStatus.CREATED);
+    public ResponseEntity<Response> addNotes(@RequestBody NotesDto notesDto) {
+        return new ResponseEntity<Response>(notepadService.addNotes(notesDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/updateNotes/{id}")
-    public ResponseEntity<Response> updateNotes(@RequestBody NotesDto notesDto, @PathVariable String id){
-        return new ResponseEntity<Response>(notepadService.updateNotes(notesDto,id),HttpStatus.OK);
+    public ResponseEntity<Response> updateNotes(@RequestBody NotesDto notesDto, @PathVariable String id) {
+        return new ResponseEntity<Response>(notepadService.updateNotes(notesDto, id), HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteNotes/{id}")
-    public ResponseEntity<Response> deleteNotes(@PathVariable String id){
-        return new ResponseEntity<Response>(notepadService.deleteNotes(id),HttpStatus.OK);
+    public ResponseEntity<Response> deleteNotes(@PathVariable String id) {
+        return new ResponseEntity<Response>(notepadService.deleteNotes(id), HttpStatus.OK);
     }
 }

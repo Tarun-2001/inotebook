@@ -48,8 +48,8 @@ public class AuthenticationImpl implements AuthenticationService {
     UserDetailsService userDetailsService;
 
     @Override
-    public  String login(String email, String password){
-        var authentication  = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
+    public String login(String email, String password) {
+        var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String userId = authenticationRespository.findByEmail(authentication.getName()).getId();
         System.out.println(userId);
@@ -57,9 +57,9 @@ public class AuthenticationImpl implements AuthenticationService {
     }
 
     @Override
-    public String signup(String email, String password, String name){
+    public String signup(String email, String password, String name) {
 
-        if(authenticationRespository.existsByEmail(email)){
+        if (authenticationRespository.existsByEmail(email)) {
             throw new RuntimeException("User Already Exists");
         }
         var encryptedPassword = bCryptPasswordEncoder.encode(password);
@@ -83,7 +83,7 @@ public class AuthenticationImpl implements AuthenticationService {
         assert userDetails != null;
         userDetails.remove("password");
         userDetails.remove("_class");
-        userDetails.put("_id",userId);
+        userDetails.put("_id", userId);
         return userDetails;
     }
 }

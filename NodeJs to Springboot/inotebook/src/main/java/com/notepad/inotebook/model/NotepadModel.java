@@ -1,5 +1,8 @@
 package com.notepad.inotebook.model;
 
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +27,7 @@ public class NotepadModel {
     private  String tag;
     private  String description;
     private LocalDateTime date;
-    @ManyToOne
-    @JoinColumn(name = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user")
     private  AuthenticationModel authenticationModel;
 }

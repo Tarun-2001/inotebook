@@ -5,9 +5,11 @@ import lombok.Data;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Data
 @Component
 public class Response {
-    private NotesDto notesDto;
+    private List<NotesDto> notesDto;
     private String message;
 }

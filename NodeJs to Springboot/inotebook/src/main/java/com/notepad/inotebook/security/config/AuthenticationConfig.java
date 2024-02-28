@@ -20,15 +20,15 @@ public class AuthenticationConfig {
     }
 
     @Bean
-    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder){
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         var authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(userDetailsService);
         authenticationProvider.setPasswordEncoder(passwordEncoder);
-        return  authenticationProvider;
+        return authenticationProvider;
     }
 
     @Bean
-    public PasswordEncoder bCryptPassword(){
+    public PasswordEncoder bCryptPassword() {
         return new BCryptPasswordEncoder();
     }
 }
