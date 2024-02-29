@@ -40,19 +40,14 @@ public class AuthenticationImpl implements AuthenticationService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    ModelMapper modelMapper;
-    @Autowired
     MongoTemplate mongoTemplate;
     protected String jwtToken;
-    @Autowired
-    UserDetailsService userDetailsService;
 
     @Override
     public String login(String email, String password) {
         var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String userId = authenticationRespository.findByEmail(authentication.getName()).getId();
-        System.out.println(userId);
         return jwtToken = JwtUtil.generateToken(userId);
     }
 

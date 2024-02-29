@@ -43,7 +43,6 @@ public class NotepadServicempl implements NotepadService {
     public Response fetchNotes() throws NumberFormatException {
         AuthenticationModel user = authenticationRespository.findById(JwtUtil.ID);
         List<NotepadModel> fetchedData = notepadRepository.findAllByAuthenticationModel(user);
-        fetchedData.forEach(System.out::println);
         List<NotesDto> data = fetchedData.stream().map(ele -> modelMapper.map(ele, NotesDto.class)).collect(Collectors.toList());
         response.setNotesDto(data);
         response.setMessage("Data Fetched Successfully");

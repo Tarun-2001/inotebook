@@ -19,10 +19,6 @@ public class NotepadController {
     @Autowired
     NotepadService notepadService;
 
-    //    @GetMapping
-//    public NotepadModel sample(){
-//        return notepadService.sample();
-//    }
     @GetMapping("/fetchNotes")
     public ResponseEntity<Response> fetchNotes() {
         return new ResponseEntity<Response>(notepadService.fetchNotes(), HttpStatus.OK);
